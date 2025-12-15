@@ -117,11 +117,35 @@
     </header>
 
     <main>
-      <h2>Meus Atendimentos</h2>
+      <div th:if="${tipoUsuario != 'ADMIN'}">
+        <h2>Meus Atendimentos</h2>
+      </div>
 
       <!-- Botão para criar novo atendimento, visível apenas para o secretário -->
       <div th:if="${tipoUsuario == 'SECRETARIO'}">
         <a th:href="@{/atendimento/novo}" class="btn new">Novo Atendimento</a>
+      </div>
+
+      <div
+        th:if="${tipoUsuario == 'ADMIN'}"
+        style="margin: 20px 0; display: flex; justify-content: center"
+      >
+        <a
+          th:href="@{/aluno/listar}"
+          class="btn"
+          style="
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            background-color: #002244;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s;
+          "
+        >
+          Gerenciar Alunos
+        </a>
       </div>
 
       <div th:each="atendimento : ${atendimentos}" class="card">

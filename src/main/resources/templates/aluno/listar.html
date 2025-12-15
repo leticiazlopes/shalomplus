@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Lista de Alunos - Shalom+</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f0f8ff;
+        margin: 0;
+        padding: 0;
+        color: #333;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      header {
+        background-color: #003366;
+        color: white;
+        padding: 15px 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: 22px;
+      }
+      nav a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        margin-left: 15px;
+      }
+      nav a:hover {
+        text-decoration: underline;
+      }
+
+      main {
+        flex: 1;
+        padding: 30px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #003366;
+      }
+
+      th {
+        background-color: #003366;
+        color: white;
+      }
+
+      .btn {
+        background-color: #003366;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 14px;
+      }
+
+      .btn:hover {
+        background-color: #002244;
+      }
+
+      .btn-create {
+        margin-bottom: 15px;
+        display: inline-block;
+      }
+
+      footer {
+        text-align: center;
+        padding: 15px;
+        background-color: #e0f7fa;
+        color: #003366;
+        border-top: 1px solid #00b2b2;
+        margin-top: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Gerenciamento de Alunos</h1>
+      <nav>
+        <a th:href="@{/home}">Home</a> |
+        <a th:href="@{/auth/logout}">Sair</a>
+      </nav>
+    </header>
+
+    <main>
+      <a th:href="@{/aluno/novo}" class="btn btn-create">Novo Aluno</a>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Turma / Curso</th>
+            <th>Matrícula</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="aluno : ${alunos}">
+            <td th:text="${aluno.nome}"></td>
+            <td th:text="${aluno.turma}"></td>
+            <td th:text="${aluno.matricula}"></td>
+
+            <td>
+              <a th:href="@{'/aluno/editar/' + ${aluno.id}}" class="btn"
+                >Editar</a
+              >
+              <a
+                th:href="@{'/aluno/deletar/' + ${aluno.id}}"
+                class="btn"
+                onclick="return confirm('Deseja realmente excluir este aluno?');"
+                >Excluir</a
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+
+    <footer>
+      <p>Shalom+ &copy; 2025</p>
+    </footer>
+  </body>
+</html>

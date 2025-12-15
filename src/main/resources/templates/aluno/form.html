@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cadastro/Editar Aluno - Shalom+</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f0f8ff;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+      header {
+        background-color: #003366;
+        color: white;
+        padding: 20px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 24px;
+      }
+      nav a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        margin-left: 10px;
+      }
+      main {
+        padding: 30px;
+        display: flex;
+        justify-content: center;
+      }
+      form {
+        background-color: white;
+        padding: 25px 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 500px;
+      }
+      label {
+        display: block;
+        margin-top: 15px;
+        font-weight: bold;
+      }
+      input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #00b2b2;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 14px;
+      }
+      button {
+        margin-top: 20px;
+        background-color: #003366;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        cursor: pointer;
+        font-weight: bold;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+      }
+      button:hover {
+        background-color: #002244;
+      }
+      .back-link {
+        display: inline-block;
+        margin-top: 15px;
+        color: #003366;
+        font-weight: bold;
+        text-decoration: none;
+        font-size: 14px;
+      }
+      .back-link:hover {
+        text-decoration: underline;
+      }
+      footer {
+        text-align: center;
+        padding: 15px;
+        margin-top: 30px;
+        border-top: 1px solid #082a4dff;
+        background-color: #e0f7fa;
+        color: #003366;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1 th:text="${aluno.id != null} ? 'Editar Aluno' : 'Novo Aluno'">
+        Novo Aluno
+      </h1>
+      <nav>
+        <a th:href="@{/aluno/listar}">Voltar</a> |
+        <a th:href="@{/auth/logout}">Sair</a>
+      </nav>
+    </header>
+
+    <main>
+      <form th:action="@{/aluno/salvar}" method="post">
+        <input type="hidden" name="id" th:value="${aluno.id}" />
+
+        <label for="nome">Nome:</label>
+        <input
+          type="text"
+          id="nome"
+          name="nome"
+          th:value="${aluno.nome}"
+          required
+        />
+
+        <label for="matricula">Matrícula:</label>
+        <input
+          type="text"
+          id="matricula"
+          name="matricula"
+          th:value="${aluno.matricula}"
+          required
+        />
+
+        <label for="turma">Turma:</label>
+        <input
+          type="text"
+          id="turma"
+          name="turma"
+          th:value="${aluno.turma}"
+          required
+        />
+
+        <label for="senha">Senha:</label>
+        <input
+          type="password"
+          id="senha"
+          name="senha"
+          th:value="${aluno.senha}"
+          required
+        />
+
+        <button
+          type="submit"
+          th:text="${aluno.id != null} ? 'Atualizar' : 'Cadastrar'"
+        >
+          Cadastrar
+        </button>
+        <a th:href="@{/aluno/listar}" class="back-link">Voltar para lista</a>
+      </form>
+    </main>
+
+    <footer>
+      <p>Shalom+ &copy; 2025</p>
+    </footer>
+  </body>
+</html>
