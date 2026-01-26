@@ -1,283 +1,409 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Novo Atendimento - Shalom+</title>
-    <style>
-      :root {
-        --azul-header: #003366;
-        --azul-bg: #1a237e;
-        --borda: #00b2b2;
-        --card: #ffffff;
-        --texto: #0f172a;
-        --muted: #475569;
-        --footer-bg: #e0f7fa;
-      }
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Novo Atendimento — Shalom+</title>
 
-      * { box-sizing: border-box; }
+  <style>
+    :root{
+      --bg-0:#0b1020;
+      --bg-1:#0f1b3a;
 
-      body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background-color: var(--azul-bg);
-        margin: 0;
-        padding: 0;
-        color: #fff;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
+      --text:#eaf0ff;
+      --muted:rgba(234,240,255,.72);
 
-      header {
-        background-color: var(--azul-header);
-        color: white;
-        padding: 20px 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
+      --card:rgba(255,255,255,.08);
+      --border:rgba(255,255,255,.14);
 
-      header h1 {
-        margin: 0;
-        font-size: 24px;
-        letter-spacing: 0.2px;
-      }
+      --brand:#4f46e5;
+      --brand-2:#06b6d4;
 
-      nav a {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-        margin-left: 10px;
-      }
-      nav a:hover { text-decoration: underline; }
+      --danger:#ef4444;
+      --danger-bg: rgba(239,68,68,.14);
+      --danger-bd: rgba(239,68,68,.30);
 
-      main {
-        flex: 1;
-        padding: 30px 16px;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-      }
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --radius:16px;
 
-      .wrap {
-        width: 100%;
-        max-width: 980px;
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 16px;
-      }
+      --input: rgba(255,255,255,.06);
+      --input-focus: rgba(79,70,229,.16);
+    }
 
-      .hint {
-        color: rgba(255, 255, 255, 0.85);
-        margin: 0;
-        font-size: 14px;
-        line-height: 1.4;
-      }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
 
-      .card {
-        background-color: var(--card);
-        color: var(--texto);
-        padding: 22px 24px;
-        border-radius: 10px;
-        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
-        width: 100%;
-      }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 15% 10%, rgba(79,70,229,.35), transparent 60%),
+        radial-gradient(900px 500px at 85% 25%, rgba(6,182,212,.25), transparent 55%),
+        radial-gradient(700px 420px at 50% 90%, rgba(147,51,234,.18), transparent 60%),
+        linear-gradient(180deg, var(--bg-0), var(--bg-1));
+      overflow-x:hidden;
+      display:flex;
+      flex-direction:column;
+      min-height:100vh;
+    }
 
-      .card h2 {
-        margin: 0 0 6px 0;
-        font-size: 18px;
-        color: var(--texto);
-      }
+    /* Header */
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(11,16,32,.78), rgba(11,16,32,.35));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .topbar{
+      max-width:1100px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
 
-      .card p.sub {
-        margin: 0 0 16px 0;
-        color: var(--muted);
-        font-size: 14px;
-      }
+    /* Logo quadrada recortada */
+    .brand-logo-wrapper{
+      width:46px;
+      height:46px;
+      border-radius:14px;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:
+        0 10px 28px rgba(0,0,0,.35),
+        inset 0 0 0 1px rgba(255,255,255,.05);
+      flex:0 0 auto;
+    }
+    .brand-logo{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center;
+      display:block;
+    }
+    .brand-title{
+      display:flex;
+      flex-direction:column;
+      line-height:1.1;
+    }
+    .brand-title strong{
+      font-size:14px;
+      letter-spacing:.2px;
+    }
+    .brand-title small{
+      margin-top:3px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight:600;
+    }
 
-      .alert {
-        border-radius: 8px;
-        padding: 12px 14px;
-        margin-bottom: 14px;
-        font-weight: 700;
-        font-size: 14px;
-        line-height: 1.35;
-      }
-      .alert-error {
-        background: #fee2e2;
-        border: 1px solid #ef4444;
-        color: #991b1b;
-      }
+    .nav{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .link{
+      color: rgba(234,240,255,.92);
+      text-decoration:none;
+      font-weight:800;
+      font-size:13px;
+      padding:9px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      transition: .12s ease;
+      white-space:nowrap;
+    }
+    .link:hover{ transform: translateY(-1px); background: rgba(255,255,255,.09); }
+    .link-danger{
+      border-color: rgba(239,68,68,.28);
+      background: rgba(239,68,68,.10);
+    }
 
-      form {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
+    /* Main */
+    main{
+      flex:1;
+      max-width:1100px;
+      width:100%;
+      margin: 22px auto 24px;
+      padding: 0 18px;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+    }
+    .wrap{
+      width:100%;
+      max-width: 820px;
+      display:grid;
+      gap:14px;
+    }
 
-      label {
-        font-weight: bold;
-        font-size: 14px;
-        color: var(--texto);
-        margin-bottom: 4px;
-      }
+    .hint{
+      margin:0;
+      color: rgba(234,240,255,.78);
+      font-size: 13px;
+      line-height:1.45;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px dashed rgba(255,255,255,.16);
+      background: rgba(255,255,255,.05);
+    }
 
-      .field {
-        display: flex;
-        flex-direction: column;
-      }
+    .card{
+      background: linear-gradient(180deg, var(--card), rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
 
-      input,
-      select,
-      textarea {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid var(--borda);
-        border-radius: 6px;
-        font-size: 14px;
-        outline: none;
-      }
+    .card h2{
+      margin:0 0 6px 0;
+      font-size: 18px;
+      letter-spacing:-.1px;
+      color: rgba(234,240,255,.95);
+    }
+    .card p.sub{
+      margin:0 0 14px 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.45;
+    }
 
-      input:focus,
-      select:focus,
-      textarea:focus {
-        box-shadow: 0 0 0 3px rgba(0, 178, 178, 0.18);
-      }
+    .alert{
+      border-radius: 14px;
+      padding: 12px 12px;
+      margin-bottom: 14px;
+      border:1px solid var(--danger-bd);
+      background: var(--danger-bg);
+      color: rgba(254,202,202,1);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.35;
+    }
 
-      .row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-      }
-      @media (max-width: 700px) {
-        .row { grid-template-columns: 1fr; }
-      }
+    form{ display:grid; gap:12px; }
 
-      button {
-        margin-top: 6px;
-        background-color: var(--azul-header);
-        color: white;
-        border: none;
-        padding: 12px 16px;
-        cursor: pointer;
-        font-weight: bold;
-        border-radius: 6px;
-        transition: all 0.2s ease;
-        width: fit-content;
-        min-width: 210px;
-      }
+    .field{ display:grid; gap:7px; }
 
-      button:hover { background-color: #002244; }
+    label{
+      font-weight:800;
+      font-size: 12.5px;
+      color: rgba(234,240,255,.92);
+      letter-spacing:.2px;
+    }
 
-      footer {
-        text-align: center;
-        padding: 14px;
-        border-top: 1px solid #082a4dff;
-        background-color: var(--footer-bg);
-        color: var(--azul-header); /* ✅ agora aparece */
-      }
-      footer p { margin: 0; font-weight: 600; }
+    .input{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background: var(--input);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius: 14px;
+      padding: 11px 12px;
+      transition: .18s ease;
+    }
+    .input:focus-within{
+      border-color: rgba(79,70,229,.70);
+      box-shadow: 0 0 0 4px var(--input-focus);
+      background: rgba(255,255,255,.08);
+    }
 
-      .actions {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-top: 6px;
-      }
-      .link {
-        display: inline-block;
-        padding: 10px 14px;
-        border-radius: 6px;
-        text-decoration: none;
-        font-weight: 700;
-        color: var(--azul-header);
-        background: rgba(0, 51, 102, 0.08);
-      }
-      .link:hover { background: rgba(0, 51, 102, 0.12); }
-    </style>
-  </head>
+    input, select{
+      width:100%;
+      border:0;
+      outline:0;
+      background: transparent;
+      color: var(--text);
+      font-size: 14px;
+      padding: 0;
+    }
 
-  <body>
-    <header>
-      <h1>Cadastro de Novo Atendimento</h1>
-      <nav>
-        <a th:href="@{/home}">Voltar</a> |
-        <a th:href="@{/auth/logout}">Sair</a>
-      </nav>
-    </header>
+    /* deixa o placeholder do select mais previsível */
+    select:invalid{ color: rgba(234,240,255,.55); }
+    option{ color:#0b1020; }
 
-    <main>
-      <div class="wrap">
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 760px){
+      .row{ grid-template-columns: 1fr; }
+    }
 
-        <p class="hint">
-          Preencha os dados abaixo para agendar um atendimento. Caso o profissional já esteja ocupado
-          no horário escolhido, o sistema vai avisar.
-        </p>
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 4px;
+      justify-content:flex-end;
+    }
 
-        <div class="card">
-          <h2>Novo atendimento</h2>
-          <p class="sub">Selecione aluno, profissional, data/hora e o tipo.</p>
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      text-decoration:none;
+      font-weight:900;
+      font-size: 13px;
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+      min-width: 180px;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.09);
+      border-color: rgba(255,255,255,.20);
+    }
+    .btn-primary{
+      color:#0b1020;
+      background: linear-gradient(135deg, rgba(79,70,229,1), rgba(6,182,212,1));
+      border: none;
+      box-shadow: 0 16px 34px rgba(79,70,229,.22);
+    }
+    .btn-primary:hover{ filter: brightness(1.03); }
 
-          <!-- ✅ Erro agora fica dentro do card, bem visível -->
-          <div
-            class="alert alert-error"
-            th:if="${param.erro != null and param.erro[0] == 'indisponivel'}"
-          >
-            Profissional indisponível nesse horário. Escolha outro.
+    footer{
+      text-align:center;
+      padding:16px 10px 22px;
+      color: rgba(234,240,255,.55);
+      font-size: 12px;
+      border-top: 1px solid rgba(255,255,255,.06);
+      margin-top: 12px;
+    }
+
+    @media (max-width: 540px){
+      .brand-title{ display:none; }
+      .brand-logo-wrapper{ width:44px;height:44px;border-radius:12px; }
+      .actions{ justify-content:stretch; }
+      .btn{ width:100%; min-width: unset; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; scroll-behavior:auto !important; }
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-logo-wrapper">
+        <img th:src="@{/img/logo.png}" alt="Shalom+" class="brand-logo">
+      </div>
+      <div class="brand-title">
+        <strong>Shalom+</strong>
+        <small>Novo atendimento</small>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a th:href="@{/home}" class="link">Voltar</a>
+      <a th:href="@{/auth/logout}" class="link link-danger">Sair</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <p class="hint">
+      Preencha os dados abaixo para agendar um atendimento. Se o profissional já estiver ocupado no horário escolhido, o sistema vai avisar.
+    </p>
+
+    <div class="card">
+      <h2>Cadastrar atendimento</h2>
+      <p class="sub">Selecione aluno, profissional, data/hora e o tipo.</p>
+
+      <div class="alert"
+           th:if="${param.erro != null and param.erro[0] == 'indisponivel'}">
+        Profissional indisponível nesse horário. Escolha outro.
+      </div>
+
+      <form th:action="@{/atendimento/novo}" method="post">
+
+        <div class="field">
+          <label for="aluno">Aluno</label>
+          <div class="input">
+            <select id="aluno" name="alunoId" required>
+              <option value="" disabled selected>Selecione o aluno</option>
+              <option th:each="aluno : ${alunos}"
+                      th:value="${aluno.id}"
+                      th:text="${aluno.nome + ' - ' + aluno.turma}">
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="profissional">Profissional</label>
+          <div class="input">
+            <select id="profissional" name="profissionalId" required>
+              <option value="" disabled selected>Selecione o profissional</option>
+              <option th:each="prof : ${profissionais}"
+                      th:value="${prof.id}"
+                      th:text="${prof.nome + ' - ' + prof.especialidade}">
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="dataHora">Data e Hora</label>
+            <div class="input">
+              <input type="datetime-local" id="dataHora" name="dataHora" required />
+            </div>
           </div>
 
-          <form th:action="@{/atendimento/novo}" method="post">
-            <div class="field">
-              <label for="aluno">Aluno:</label>
-              <select id="aluno" name="alunoId" required>
-                <option value="" disabled selected>Selecione o aluno</option>
-                <option
-                  th:each="aluno : ${alunos}"
-                  th:value="${aluno.id}"
-                  th:text="${aluno.nome + ' - ' + aluno.turma}"
-                ></option>
+          <div class="field">
+            <label for="tipo">Tipo de atendimento</label>
+            <div class="input">
+              <select id="tipo" name="tipo" required>
+                <option value="" disabled selected>Selecione o tipo</option>
+                <option>Psicológico</option>
+                <option>Médico</option>
               </select>
             </div>
-
-            <div class="field">
-              <label for="profissional">Profissional:</label>
-              <select id="profissional" name="profissionalId" required>
-                <option value="" disabled selected>Selecione o profissional</option>
-                <option
-                  th:each="prof : ${profissionais}"
-                  th:value="${prof.id}"
-                  th:text="${prof.nome + ' - ' + prof.especialidade}"
-                ></option>
-              </select>
-            </div>
-
-            <div class="row">
-              <div class="field">
-                <label for="dataHora">Data e Hora:</label>
-                <input type="datetime-local" id="dataHora" name="dataHora" required />
-              </div>
-
-              <div class="field">
-                <label for="tipo">Tipo de Atendimento:</label>
-                <select id="tipo" name="tipo" required>
-                  <option value="" disabled selected>Selecione o tipo</option>
-                  <option>Psicológico</option>
-                  <option>Médico</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="actions">
-              <button type="submit">Cadastrar Atendimento</button>
-              <a class="link" th:href="@{/home}">Cancelar</a>
-            </div>
-          </form>
+          </div>
         </div>
-      </div>
-    </main>
 
-    <footer>
-      <p>Shalom+ &copy; 2025</p>
-    </footer>
-  </body>
+        <div class="actions">
+          <a class="btn" th:href="@{/home}">Cancelar</a>
+          <button type="submit" class="btn btn-primary">Cadastrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<footer>
+  Shalom+ &copy; 2025 • IFPB
+</footer>
+
+</body>
 </html>

@@ -1,117 +1,433 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Login - Shalom+</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #1a237e;
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-        header {
-            background-color: #003366;
-            color: white;
-            padding: 15px 20px;
-            text-align: center;
-        }
-        header h1 {
-            margin: 0;
-            font-size: 22px;
-        }
-        main {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: calc(100vh - 60px); /* Altura total menos header */
-            padding: 20px;
-        }
-        .login-container {
-            width: 100%;
-            max-width: 400px;
-            background-color: white;
-            padding: 30px 25px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            box-sizing: border-box;
-        }
-        h2 {
-            text-align: center;
-            color: #003366;
-            margin-bottom: 25px;
-            font-size: 20px;
-        }
-        label {
-            display: block;
-            font-weight: bold;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #003366;
-            border-radius: 5px;
-            box-sizing: border-box;
-            font-size: 14px;
-        }
-        button {
-            width: 100%;
-            padding: 12px;
-            margin-top: 20px;
-            background-color: #002244;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        button:hover {
-            background-color: #002250;
-        }
-        .error-message {
-            color: red;
-            text-align: center;
-            margin-bottom: 15px;
-            font-size: 14px;
-        }
-        footer {
-            text-align: center;
-            padding: 12px 0;
-            border-top: 1px solid #003366;
-            font-size: 13px;
-            color: #ffffffff;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login — Shalom+</title>
+
+  <style>
+    :root{
+      --bg-0:#0b1020;
+      --bg-1:#0f1b3a;
+      --brand:#4f46e5;       /* indigo */
+      --brand-2:#06b6d4;     /* cyan */
+      --text:#eaf0ff;
+      --muted:rgba(234,240,255,.72);
+      --card:rgba(255,255,255,.08);
+      --card-2:rgba(255,255,255,.10);
+      --border:rgba(255,255,255,.14);
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --radius:16px;
+      --danger:#ef4444;
+      --ok:#22c55e;
+      --input:rgba(255,255,255,.06);
+      --input-focus:rgba(79,70,229,.16);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 15% 10%, rgba(79,70,229,.35), transparent 60%),
+        radial-gradient(900px 500px at 85% 25%, rgba(6,182,212,.25), transparent 55%),
+        radial-gradient(700px 420px at 50% 90%, rgba(147,51,234,.18), transparent 60%),
+        linear-gradient(180deg, var(--bg-0), var(--bg-1));
+      overflow-x:hidden;
+    }
+
+    /* Header */
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(11,16,32,.78), rgba(11,16,32,.35));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .topbar{
+      max-width:1100px;
+      margin:0 auto;
+      padding:16px 20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:800;
+      letter-spacing:.3px;
+    }
+    .logo{
+      width:38px; height:38px;
+      border-radius:12px;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,.35), transparent 60%),
+        linear-gradient(135deg, var(--brand), var(--brand-2));
+      box-shadow: 0 12px 30px rgba(79,70,229,.35);
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .brand small{
+      display:block;
+      font-weight:600;
+      color:var(--muted);
+      margin-top:2px;
+      letter-spacing:0;
+      font-size:12px;
+    }
+
+    /* Layout */
+    main{
+      min-height: calc(100vh - 70px);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:28px 18px 40px;
+    }
+    .shell{
+      width:100%;
+      max-width:980px;
+      display:grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap:18px;
+      align-items:stretch;
+    }
+
+    .hero{
+      padding:28px;
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(600px 240px at 10% 10%, rgba(79,70,229,.35), transparent 60%),
+        radial-gradient(500px 220px at 90% 25%, rgba(6,182,212,.22), transparent 60%),
+        radial-gradient(500px 240px at 50% 95%, rgba(147,51,234,.16), transparent 65%);
+      pointer-events:none;
+    }
+    .hero > *{ position:relative; }
+    .hero h1{
+      margin:0 0 10px;
+      font-size: 34px;
+      line-height:1.08;
+      letter-spacing:-.6px;
+    }
+    .hero p{
+      margin:0 0 18px;
+      color:var(--muted);
+      max-width:52ch;
+      line-height:1.55;
+    }
+    .chips{
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin-top:14px;
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      color: var(--text);
+      font-size: 13px;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:999px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      box-shadow: 0 8px 18px rgba(79,70,229,.35);
+    }
+
+    /* Card login */
+    .card{
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, var(--card), rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: var(--shadow);
+      padding: 22px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      min-height: 420px;
+    }
+    .card h2{
+      margin:0 0 6px;
+      font-size:22px;
+      letter-spacing:-.2px;
+    }
+    .card .sub{
+      margin:0 0 18px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .alert{
+      border-radius:12px;
+      padding: 12px 12px;
+      margin-bottom:14px;
+      border:1px solid rgba(239,68,68,.35);
+      background: rgba(239,68,68,.10);
+      color:#fecaca;
+      font-size: 13px;
+      line-height:1.35;
+    }
+
+    form{ display:grid; gap:12px; }
+    .field{
+      display:grid; gap:7px;
+    }
+    label{
+      font-size:12.5px;
+      color: rgba(234,240,255,.86);
+      font-weight:700;
+      letter-spacing:.2px;
+    }
+    .input{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background: var(--input);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius: 12px;
+      padding: 12px 12px;
+      transition: .18s ease;
+    }
+    .input:focus-within{
+      border-color: rgba(79,70,229,.70);
+      box-shadow: 0 0 0 4px var(--input-focus);
+      background: rgba(255,255,255,.08);
+    }
+    .icon{
+      width:18px;height:18px; opacity:.9;
+      flex:0 0 auto;
+    }
+    input[type="text"], input[type="password"]{
+      width:100%;
+      border:0;
+      outline:0;
+      background: transparent;
+      color: var(--text);
+      font-size: 14px;
+      padding: 0;
+    }
+    input::placeholder{ color: rgba(234,240,255,.45); }
+
+    .row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-top: 2px;
+    }
+    .check{
+      display:flex; align-items:center; gap:8px;
+      font-size: 13px;
+      color: var(--muted);
+      user-select:none;
+    }
+    .check input{
+      width:16px;height:16px;
+      accent-color: var(--brand);
+    }
+    .link{
+      color: rgba(234,240,255,.86);
+      text-decoration:none;
+      font-size:13px;
+    }
+    .link:hover{ text-decoration:underline; }
+
+    .btn{
+      margin-top: 6px;
+      width:100%;
+      border:0;
+      cursor:pointer;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-weight: 800;
+      letter-spacing:.2px;
+      color: #0b1020;
+      background: linear-gradient(135deg, rgba(79,70,229,1), rgba(6,182,212,1));
+      box-shadow: 0 16px 34px rgba(79,70,229,.25);
+      transition: transform .12s ease, filter .12s ease;
+    }
+    .btn:hover{ filter: brightness(1.03); transform: translateY(-1px); }
+    .btn:active{ transform: translateY(0); }
+
+    .fineprint{
+      margin-top: 14px;
+      color: rgba(234,240,255,.55);
+      font-size: 12px;
+      line-height:1.45;
+      text-align:center;
+    }
+
+    /* show password */
+    .toggle{
+      border:0;
+      background: transparent;
+      color: rgba(234,240,255,.80);
+      font-size: 12px;
+      font-weight: 700;
+      cursor:pointer;
+      padding: 6px 8px;
+      border-radius: 10px;
+      transition: .12s ease;
+    }
+    .toggle:hover{
+      background: rgba(255,255,255,.08);
+    }
+
+    footer{
+      text-align:center;
+      padding:16px 10px 22px;
+      color: rgba(234,240,255,.55);
+      font-size: 12px;
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+
+    /* Responsive */
+    @media (max-width: 860px){
+      .shell{ grid-template-columns: 1fr; }
+      .hero{ order: 2; }
+      .card{ min-height: unset; }
+      .hero h1{ font-size: 28px; }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; scroll-behavior:auto !important; }
+    }
+  </style>
 </head>
+
 <body>
-    <header>
-        <h1>Shalom+</h1>
-    </header>
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        Shalom+
+        <small>Sistema de atendimentos e agendamentos</small>
+      </div>
+    </div>
+    <div style="font-size:12px;color:rgba(234,240,255,.55);">
+      Acesso seguro • <span th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy')}">--/--/----</span>
+    </div>
+  </div>
+</header>
 
-    <main>
-        <div class="login-container">
-            <h2>Login</h2>
+<main>
+  <section class="shell">
 
-            <div th:if="${mensagem}" class="error-message" th:text="${mensagem}"></div>
+    <!-- Lado esquerdo / apresentação -->
+    <div class="hero">
+      <h1>Bem-vindo(a) de volta 👋</h1>
+      <p>
+        Acesse sua conta para gerenciar agendamentos, atendimentos e acompanhar suas informações.
+      </p>
 
-            <form th:action="@{/auth}" method="post">
-                <label for="login">Matrícula / CRP / CRM / CPF</label>
-                <input type="text" id="login" name="login" placeholder="Digite sua matrícula, CRP, CRM ou CPF" required>
+      <div class="chips">
+        <div class="chip"><span class="dot"></span> Login com matrícula/CRP/CRM/CPF</div>
+        <div class="chip"><span class="dot"></span> Interface responsiva</div>
+        <div class="chip"><span class="dot"></span> Rápido e simples</div>
+      </div>
+    </div>
 
-                <label for="senha">Senha</label>
-                <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required>
+    <!-- Card de login -->
+    <div class="card">
+      <h2>Entrar</h2>
+      <p class="sub">Informe suas credenciais para continuar.</p>
 
-                <button type="submit">Entrar</button>
-            </form>
+      <div th:if="${mensagem}" class="alert" th:text="${mensagem}">
+        Mensagem de erro aqui.
+      </div>
+
+      <form th:action="@{/auth}" method="post" autocomplete="on">
+        <div class="field">
+          <label for="login">Matrícula / CRP / CRM / CPF</label>
+          <div class="input">
+            <!-- ícone usuário -->
+            <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M20 21a8 8 0 0 0-16 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M12 13a5 5 0 1 0-5-5 5 5 0 0 0 5 5Z" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+            <input
+              type="text"
+              id="login"
+              name="login"
+              placeholder="Digite sua matrícula, CRP, CRM ou CPF"
+              required
+              autofocus
+            />
+          </div>
         </div>
-    </main>
 
-    <footer>
-        Shalom+ &copy; 2025
-    </footer>
+        <div class="field">
+          <label for="senha">Senha</label>
+          <div class="input">
+            <!-- ícone cadeado -->
+            <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7 11V8a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <path d="M6 11h12a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+
+            <input
+              type="password"
+              id="senha"
+              name="senha"
+              placeholder="Digite sua senha"
+              required
+            />
+
+            <button class="toggle" type="button" onclick="togglePassword()" aria-label="Mostrar/ocultar senha">
+              Mostrar
+            </button>
+          </div>
+        </div>
+
+        <div class="row">
+          <label class="check">
+            <input type="checkbox" name="lembrar" />
+            Lembrar-me
+          </label>
+
+          <a class="link" href="#" onclick="return false;">Esqueci minha senha</a>
+        </div>
+
+        <button class="btn" type="submit">Entrar</button>
+
+        <div class="fineprint">
+          Ao entrar, você concorda com o uso do sistema para fins acadêmicos.
+        </div>
+      </form>
+    </div>
+
+  </section>
+</main>
+
+<footer>
+  Shalom+ &copy; 2025 • Desenvolvido para a disciplina • IFPB
+</footer>
+
+<script>
+  function togglePassword(){
+    const input = document.getElementById("senha");
+    const btn = document.querySelector(".toggle");
+    const isPass = input.type === "password";
+    input.type = isPass ? "text" : "password";
+    btn.textContent = isPass ? "Ocultar" : "Mostrar";
+    input.focus();
+  }
+</script>
 </body>
 </html>

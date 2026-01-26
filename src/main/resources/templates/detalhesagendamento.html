@@ -1,100 +1,413 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Detalhes do Atendimento - Shalom+</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #003366;
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detalhes do Atendimento — Shalom+</title>
 
-        header {
-            background-color: #003366;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            font-size: 1.5em;
-            font-weight: bold;
-        }
+  <style>
+    :root{
+      --bg-0:#0b1020;
+      --bg-1:#0f1b3a;
 
-        main {
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 20px;
-        }
+      --text:#eaf0ff;
+      --muted:rgba(234,240,255,.72);
 
-        .card {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
+      --card:rgba(255,255,255,.08);
+      --border:rgba(255,255,255,.14);
 
-        .card h2 {
-            margin-top: 0;
-        }
+      --brand:#4f46e5;
+      --brand-2:#06b6d4;
 
-        .card p {
-            margin: 10px 0;
-            font-size: 1.1em;
-        }
+      --danger:#ef4444;
+      --ok:#22c55e;
+      --warn:#f59e0b;
 
-        .actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 15px;
-        }
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --radius:16px;
+    }
 
-        .btn {
-            padding: 10px 20px;
-            font-size: 1em;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            color: white;
-            background-color: #002244;
-            transition: background-color 0.3s;
-        }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
 
-        .btn:hover {
-            background-color: #002250;
-        }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 15% 10%, rgba(79,70,229,.35), transparent 60%),
+        radial-gradient(900px 500px at 85% 25%, rgba(6,182,212,.25), transparent 55%),
+        radial-gradient(700px 420px at 50% 90%, rgba(147,51,234,.18), transparent 60%),
+        linear-gradient(180deg, var(--bg-0), var(--bg-1));
+      overflow-x:hidden;
+      display:flex;
+      flex-direction:column;
+      min-height:100vh;
+    }
 
-        .btn.cancel {
-            background-color: #e74c3c;
-        }
+    /* Header */
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(11,16,32,.78), rgba(11,16,32,.35));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
 
-        .btn.cancel:hover {
-            background-color: #c0392b;
-        }
-    </style>
+    .topbar{
+      max-width:1100px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width: 180px;
+    }
+
+    .brand-logo-wrapper{
+      width:46px;
+      height:46px;
+      border-radius:14px;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:
+        0 10px 28px rgba(0,0,0,.35),
+        inset 0 0 0 1px rgba(255,255,255,.05);
+      flex:0 0 auto;
+    }
+    .brand-logo{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center;
+      display:block;
+    }
+
+    .brand-title{
+      display:flex;
+      flex-direction:column;
+      line-height:1.1;
+    }
+    .brand-title strong{
+      font-size:14px;
+      letter-spacing:.2px;
+    }
+    .brand-title small{
+      margin-top:3px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight:600;
+    }
+
+    .nav{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .link{
+      color: rgba(234,240,255,.92);
+      text-decoration:none;
+      font-weight:800;
+      font-size:13px;
+      padding:9px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      transition: .12s ease;
+      white-space:nowrap;
+    }
+    .link:hover{ transform: translateY(-1px); background: rgba(255,255,255,.09); }
+    .link-danger{
+      border-color: rgba(239,68,68,.28);
+      background: rgba(239,68,68,.10);
+    }
+
+    /* Main */
+    main{
+      flex:1;
+      max-width:1100px;
+      width:100%;
+      margin: 22px auto 24px;
+      padding: 0 18px;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+    }
+
+    .wrap{
+      width:100%;
+      max-width: 820px;
+      display:grid;
+      gap:14px;
+    }
+
+    .page-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top: 4px;
+    }
+    .page-head h1{
+      margin:0;
+      font-size: 20px;
+      letter-spacing:-.2px;
+    }
+    .page-head p{
+      margin:4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .card{
+      background: linear-gradient(180deg, var(--card), rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .card h2{
+      margin:0 0 10px 0;
+      font-size: 16px;
+      letter-spacing:-.1px;
+      color: rgba(234,240,255,.95);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 760px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .item{
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+    }
+
+    .k{
+      display:block;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing:.2px;
+      color: rgba(234,240,255,.72);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .v{
+      margin:0;
+      font-size: 14px;
+      color: rgba(234,240,255,.95);
+      line-height:1.4;
+      word-break: break-word;
+    }
+
+    .obs{
+      margin-top: 12px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+    }
+    .obs .v{ margin-top: 6px; color: rgba(234,240,255,.90); }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 4px 10px;
+      border-radius:999px;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing:.3px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+    }
+    .b-ok{
+      border-color: rgba(34,197,94,.28);
+      background: rgba(34,197,94,.12);
+      color: rgba(220,252,231,1);
+    }
+    .b-no{
+      border-color: rgba(245,158,11,.28);
+      background: rgba(245,158,11,.12);
+      color: rgba(254,243,199,1);
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      text-decoration:none;
+      font-weight:900;
+      font-size: 13px;
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+      min-width: 180px;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.09);
+      border-color: rgba(255,255,255,.20);
+    }
+    .btn-primary{
+      color:#0b1020;
+      background: linear-gradient(135deg, rgba(79,70,229,1), rgba(6,182,212,1));
+      border: none;
+      box-shadow: 0 16px 34px rgba(79,70,229,.22);
+    }
+    .btn-primary:hover{ filter: brightness(1.03); }
+
+    .btn-danger{
+      border-color: rgba(239,68,68,.28);
+      background: rgba(239,68,68,.10);
+    }
+
+    footer{
+      text-align:center;
+      padding:16px 10px 22px;
+      color: rgba(234,240,255,.55);
+      font-size: 12px;
+      border-top: 1px solid rgba(255,255,255,.06);
+      margin-top: 12px;
+    }
+
+    @media (max-width: 540px){
+      .brand-title{ display:none; }
+      .brand-logo-wrapper{ width:44px;height:44px;border-radius:12px; }
+      .actions{ justify-content:stretch; }
+      .btn{ width:100%; min-width: unset; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; scroll-behavior:auto !important; }
+    }
+  </style>
 </head>
+
 <body>
-    <header>
-        Detalhes do Atendimento
-    </header>
 
-    <main>
-        <div class="card">
-            <h2>Informações do Atendimento</h2>
-            <p><strong>Aluno:</strong> <span th:text="${atendimento.aluno.nome}"></span></p>
-            <p><strong>Profissional:</strong> <span th:text="${atendimento.profissional.nome}"></span></p>
-            <p><strong>Data/Hora:</strong> <span th:text="${#temporals.format(atendimento.dataHora, 'dd/MM/yyyy HH:mm')}"></span></p>
-            <p><strong>Tipo:</strong> <span th:text="${atendimento.tipo}"></span></p>
-            <p><strong>Observações:</strong> <span th:text="${atendimento.observacoes}"></span></p>
-            <p><strong>Realizado:</strong> <span th:text="${atendimento.realizado} ? 'Sim' : 'Não'"></span></p>
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-logo-wrapper">
+        <img th:src="@{/img/logo.png}" alt="Shalom+" class="brand-logo">
+      </div>
+      <div class="brand-title">
+        <strong>Shalom+</strong>
+        <small>Detalhes do atendimento</small>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a th:href="@{/home}" class="link">Voltar</a>
+      <a th:href="@{/auth/logout}" class="link link-danger">Sair</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="page-head">
+      <div>
+        <h1>Detalhes do atendimento</h1>
+        <p th:text="'Acesso seguro • ' + ${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}">
+          Acesso seguro • --/--/---- --:--
+        </p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Informações</h2>
+
+      <div class="grid">
+        <div class="item">
+          <span class="k">Aluno</span>
+          <p class="v" th:text="${atendimento.aluno.nome}">—</p>
         </div>
 
-        <div class="actions">
-            <a th:href="@{/atendimento/cancelar/{id}(id=${atendimento.id})}" class="btn cancel">Cancelar Atendimento</a>
-            <a th:href="@{/home}" class="btn">Voltar</a>
+        <div class="item">
+          <span class="k">Profissional</span>
+          <p class="v" th:text="${atendimento.profissional.nome}">—</p>
         </div>
-    </main>
+
+        <div class="item">
+          <span class="k">Data/Hora</span>
+          <p class="v" th:text="${#temporals.format(atendimento.dataHora, 'dd/MM/yyyy HH:mm')}">—</p>
+        </div>
+
+        <div class="item">
+          <span class="k">Tipo</span>
+          <p class="v" th:text="${atendimento.tipo}">—</p>
+        </div>
+
+        <div class="item">
+          <span class="k">Realizado</span>
+          <p class="v">
+            <span class="badge b-ok" th:if="${atendimento.realizado}">SIM</span>
+            <span class="badge b-no" th:if="${!atendimento.realizado}">NÃO</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="obs">
+        <span class="k">Observações</span>
+        <p class="v" th:text="${atendimento.observacoes}">Sem observações.</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <!-- ✅ opcional: só mostra cancelar se ainda não estiver cancelado (se existir esse campo) -->
+      <a th:href="@{/atendimento/cancelar/{id}(id=${atendimento.id})}"
+         class="btn btn-danger"
+         onclick="return confirm('Cancelar este atendimento?');">
+        Cancelar atendimento
+      </a>
+
+      <a th:href="@{/home}" class="btn btn-primary">
+        Voltar
+      </a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  Shalom+ &copy; 2025 • IFPB
+</footer>
+
 </body>
 </html>

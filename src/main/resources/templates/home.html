@@ -1,211 +1,532 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Home - Shalom+</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #003366;
-        color: #333;
-      }
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home — Shalom+</title>
 
-      header {
-        background-color: #003366;
-        color: white;
-        padding: 20px;
-        text-align: center;
-        font-size: 1.5em;
-        font-weight: bold;
-      }
+  <style>
+    :root{
+      --bg-0:#0b1020;
+      --bg-1:#0f1b3a;
+      --text:#eaf0ff;
+      --muted:rgba(234,240,255,.72);
 
-      nav { margin-top: 10px; }
-      nav span { font-weight: bold; }
-      nav a { color: white; text-decoration: none; margin-left: 15px; }
-      .sair:hover { color: #002244; }
+      --card:rgba(255,255,255,.08);
+      --card-2:rgba(255,255,255,.10);
+      --border:rgba(255,255,255,.14);
 
-      main {
-        max-width: 900px;
-        margin: 30px auto;
-        padding: 20px;
-      }
+      --brand:#4f46e5;     /* indigo */
+      --brand-2:#06b6d4;   /* cyan */
+      --danger:#ef4444;
+      --ok:#22c55e;
+      --warn:#f59e0b;
 
-      h2 { color: white; margin: 18px 0 10px; }
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --radius:16px;
+    }
 
-      .btn {
-        padding: 8px 15px;
-        font-size: 1em;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        text-decoration: none;
-        color: white;
-        background-color: #002244;
-        transition: background-color 0.3s;
-        display: inline-block;
-      }
-      .btn:hover { background-color: #002250; }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Helvetica Neue", sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 15% 10%, rgba(79,70,229,.35), transparent 60%),
+        radial-gradient(900px 500px at 85% 25%, rgba(6,182,212,.25), transparent 55%),
+        radial-gradient(700px 420px at 50% 90%, rgba(147,51,234,.18), transparent 60%),
+        linear-gradient(180deg, var(--bg-0), var(--bg-1));
+      overflow-x:hidden;
+    }
 
-      .card {
-        background-color: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        padding: 15px 20px;
-        margin-bottom: 15px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-      }
+    /* Header */
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(11,16,32,.78), rgba(11,16,32,.35));
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
 
-      .card-info p { margin: 5px 0; }
-      .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .topbar{
+      max-width:1100px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
 
-      .badge {
-        display: inline-block;
-        padding: 3px 8px;
-        border-radius: 999px;
-        font-size: 12px;
-        font-weight: bold;
-        color: white;
-      }
-      .b-agendado { background: #1d4ed8; }
-      .b-realizado { background: #16a34a; }
-      .b-cancelado { background: #ef4444; }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width: 180px;
+    }
 
-      footer {
-        text-align: center;
-        padding: 15px;
-        margin-top: 30px;
-        border-top: 1px solid #003366;
-        color: #ffffffff;
-      }
+    /* Logo quadrada recortada */
+    .brand-logo-wrapper{
+      width:48px;
+      height:48px;
+      border-radius:14px;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:
+        0 10px 28px rgba(0,0,0,.35),
+        inset 0 0 0 1px rgba(255,255,255,.05);
+      flex:0 0 auto;
+    }
+    .brand-logo{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center;
+      display:block;
+    }
 
-      .admin-links {
-        margin: 20px 0;
-        display: flex;
-        justify-content: center;
-        gap: 12px;
-        flex-wrap: wrap;
-      }
-    </style>
-  </head>
+    .brand-title{
+      display:flex;
+      flex-direction:column;
+      line-height:1.1;
+    }
+    .brand-title strong{
+      font-size:14px;
+      letter-spacing:.2px;
+    }
+    .brand-title small{
+      margin-top:3px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight:600;
+    }
 
-  <body>
-    <header>
-      Bem-vindo(a) ao Shalom+
-      <nav>
-        <span th:text="'Olá, ' + ${usuario.nome} + ' (' + ${tipoUsuario} + ')'"></span>
-        |
-        <a th:href="@{/auth/logout}" class="sair">Sair</a>
-      </nav>
-    </header>
+    .who{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      text-align:right;
+    }
 
-    <main>
-      <!-- ADMIN -->
-      <div th:if="${tipoUsuario == 'ADMIN'}" class="admin-links">
-        <a th:href="@{/aluno/listar}" class="btn">Gerenciar Alunos</a>
-        <a th:href="@{/profissional/listar}" class="btn">Gerenciar Profissionais</a>
-        <a th:href="@{/secretario/listar}" class="btn">Gerenciar Secretários</a>
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      color: var(--text);
+      font-size: 12.5px;
+      white-space:nowrap;
+    }
+    .dot{
+      width:9px;height:9px;border-radius:999px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      box-shadow: 0 10px 24px rgba(79,70,229,.25);
+    }
+
+    .link{
+      color: rgba(234,240,255,.92);
+      text-decoration:none;
+      font-weight:700;
+      font-size:13px;
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      transition: .12s ease;
+    }
+    .link:hover{ transform: translateY(-1px); background: rgba(255,255,255,.09); }
+
+    /* Main */
+    main{
+      max-width:1100px;
+      margin: 22px auto 36px;
+      padding: 0 18px;
+    }
+
+    .page-title{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin: 14px 0 18px;
+    }
+    .page-title h1{
+      margin:0;
+      font-size: 22px;
+      letter-spacing:-.2px;
+    }
+    .page-title p{
+      margin:4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .grid-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin: 12px 0 18px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      text-decoration:none;
+      font-weight:800;
+      font-size: 13px;
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.09);
+      border-color: rgba(255,255,255,.20);
+    }
+    .btn-primary{
+      color:#0b1020;
+      background: linear-gradient(135deg, rgba(79,70,229,1), rgba(6,182,212,1));
+      border: none;
+      box-shadow: 0 16px 34px rgba(79,70,229,.22);
+    }
+    .btn-primary:hover{ filter: brightness(1.03); }
+    .btn-danger{
+      border-color: rgba(239,68,68,.28);
+      background: rgba(239,68,68,.10);
+    }
+
+    .section{
+      margin-top: 18px;
+    }
+    .section h2{
+      margin: 14px 0 10px;
+      font-size: 15px;
+      letter-spacing:.2px;
+      color: rgba(234,240,255,.92);
+    }
+    .empty{
+      padding: 14px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.06);
+      border: 1px dashed rgba(255,255,255,.16);
+      color: rgba(234,240,255,.70);
+      font-size: 13px;
+    }
+
+    /* Cards */
+    .card{
+      background: linear-gradient(180deg, var(--card), rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 14px 16px;
+      margin-bottom: 12px;
+
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .card-info{
+      min-width: 260px;
+      flex: 1 1 520px;
+    }
+
+    .meta{
+      display:grid;
+      gap:7px;
+      margin-top: 6px;
+    }
+    .meta p{
+      margin:0;
+      color: rgba(234,240,255,.86);
+      font-size: 13px;
+      line-height:1.35;
+    }
+    .meta strong{
+      color: rgba(234,240,255,.95);
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      align-items:center;
+      flex: 0 1 auto;
+    }
+
+    /* Badges */
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 4px 10px;
+      border-radius:999px;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing:.3px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+    }
+    .b-agendado{
+      border-color: rgba(59,130,246,.30);
+      background: rgba(59,130,246,.14);
+      color: rgba(219,234,254,1);
+    }
+    .b-realizado{
+      border-color: rgba(34,197,94,.28);
+      background: rgba(34,197,94,.12);
+      color: rgba(220,252,231,1);
+    }
+    .b-cancelado{
+      border-color: rgba(239,68,68,.30);
+      background: rgba(239,68,68,.14);
+      color: rgba(254,202,202,1);
+    }
+
+    .icon{
+      width:18px;height:18px;
+      flex:0 0 auto;
+      opacity:.92;
+    }
+
+    footer{
+      text-align:center;
+      padding:16px 10px 22px;
+      color: rgba(234,240,255,.55);
+      font-size: 12px;
+      border-top: 1px solid rgba(255,255,255,.06);
+      margin-top: 22px;
+    }
+
+    @media (max-width: 540px){
+      .brand-title{ display:none; } /* no mobile fica só a logo */
+      .brand-logo-wrapper{ width:44px;height:44px;border-radius:12px; }
+      .actions{ justify-content:flex-start; width:100%; }
+      .card-info{ flex: 1 1 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ transition:none !important; scroll-behavior:auto !important; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="topbar">
+    <!-- Logo / Marca -->
+    <div class="brand">
+      <div class="brand-logo-wrapper">
+        <img th:src="@{/img/logo.png}" alt="Shalom+" class="brand-logo">
+      </div>
+      <div class="brand-title">
+        <strong>Shalom+</strong>
+        <small>Home • Painel do usuário</small>
+      </div>
+    </div>
+
+    <!-- Usuário / Sair -->
+    <div class="who">
+      <span class="chip">
+        <span class="dot"></span>
+        <span th:text="'Olá, ' + ${usuario.nome} + ' (' + ${tipoUsuario} + ')'">Olá</span>
+      </span>
+
+      <a th:href="@{/auth/logout}" class="link">Sair</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="page-title">
+    <div>
+      <h1>Visão geral</h1>
+      <p th:text="'Acesso seguro • ' + ${#dates.format(#dates.createNow(), 'dd/MM/yyyy HH:mm')}">
+        Acesso seguro • --/--/---- --:--
+      </p>
+    </div>
+
+    <!-- atalho principal (só pra secretário) -->
+    <div th:if="${tipoUsuario == 'SECRETARIO'}">
+      <a th:href="@{/atendimento/novo}" class="btn btn-primary" style="min-width: 190px;">
+        <!-- ícone + -->
+        <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Novo atendimento
+      </a>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div th:if="${tipoUsuario == 'ADMIN'}" class="grid-actions">
+    <a th:href="@{/aluno/listar}" class="btn">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M20 21a8 8 0 0 0-16 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M12 13a5 5 0 1 0-5-5 5 5 0 0 0 5 5Z" stroke="currentColor" stroke-width="1.8"/>
+      </svg>
+      Gerenciar Alunos
+    </a>
+
+    <a th:href="@{/profissional/listar}" class="btn">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M9 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      Gerenciar Profissionais
+    </a>
+
+    <a th:href="@{/secretario/listar}" class="btn">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M4 21V4a2 2 0 0 1 2-2h9l5 5v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M14 2v6h6" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M8 13h8M8 17h8M8 9h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      Gerenciar Secretários
+    </a>
+  </div>
+
+  <!-- SECRETARIO -->
+  <div th:if="${tipoUsuario == 'SECRETARIO'}" class="section">
+    <h2>Todos os atendimentos</h2>
+
+    <div th:if="${#lists.isEmpty(atendimentos)}" class="empty">
+      Nenhum atendimento cadastrado.
+    </div>
+
+    <div th:each="a : ${atendimentos}" class="card">
+      <div class="card-info">
+        <div class="meta">
+          <p><strong>Aluno:</strong> <span th:text="${a.aluno.nome}">—</span></p>
+          <p><strong>Profissional:</strong> <span th:text="${a.profissional.nome}">—</span></p>
+          <p><strong>Data/Hora:</strong> <span th:text="${#temporals.format(a.dataHora, 'dd/MM/yyyy HH:mm')}">—</span></p>
+          <p><strong>Tipo:</strong> <span th:text="${a.tipo}">—</span></p>
+
+          <p>
+            <strong>Status:</strong>
+            <span class="badge b-cancelado" th:if="${a.cancelado}">CANCELADO</span>
+            <span class="badge b-realizado" th:if="${a.cancelado != true and a.realizado == true}">REALIZADO</span>
+            <span class="badge b-agendado" th:if="${a.cancelado != true and a.realizado != true}">AGENDADO</span>
+          </p>
+        </div>
       </div>
 
-      <!-- SECRETARIO -->
-      <div th:if="${tipoUsuario == 'SECRETARIO'}">
-        <a th:href="@{/atendimento/novo}" class="btn" style="margin-bottom: 14px;">Novo Atendimento</a>
+      <div class="actions">
+        <a th:href="@{/atendimento/detalhes/{id}(id=${a.id})}" class="btn btn-primary" style="min-width:150px;">
+          Ver detalhes
+        </a>
 
-        <h2>Todos os atendimentos</h2>
+        <a th:if="${a.cancelado != true}"
+           th:href="@{/atendimento/cancelar/{id}(id=${a.id})}"
+           class="btn btn-danger"
+           onclick="return confirm('Cancelar este atendimento?');">
+          Cancelar
+        </a>
+      </div>
+    </div>
+  </div>
 
-        <div th:if="${#lists.isEmpty(atendimentos)}" style="color:white;">
-          Nenhum atendimento cadastrado.
-        </div>
+  <!-- ALUNO / PROFISSIONAL -->
+  <div th:if="${tipoUsuario == 'ALUNO' or tipoUsuario == 'PROFISSIONAL'}">
 
-        <div th:each="a : ${atendimentos}" class="card">
-          <div class="card-info">
-            <p><strong>Aluno:</strong> <span th:text="${a.aluno.nome}"></span></p>
-            <p><strong>Profissional:</strong> <span th:text="${a.profissional.nome}"></span></p>
-            <p><strong>Data/Hora:</strong>
-              <span th:text="${#temporals.format(a.dataHora, 'dd/MM/yyyy HH:mm')}"></span>
-            </p>
-            <p><strong>Tipo:</strong> <span th:text="${a.tipo}"></span></p>
-            <p>
-              <strong>Status:</strong>
-              <span class="badge b-cancelado" th:if="${a.cancelado}">CANCELADO</span>
-              <span class="badge b-realizado" th:if="${a.cancelado != true and a.realizado == true}">REALIZADO</span>
-              <span class="badge b-agendado" th:if="${a.cancelado != true and a.realizado != true}">AGENDADO</span>
-            </p>
-          </div>
+    <div class="section">
+      <h2>Próximos atendimentos</h2>
 
-          <div class="actions">
-            <a th:href="@{/atendimento/detalhes/{id}(id=${a.id})}" class="btn">Ver Detalhes</a>
-            <a th:if="${a.cancelado != true}" th:href="@{/atendimento/cancelar/{id}(id=${a.id})}"
-               class="btn"
-               onclick="return confirm('Cancelar este atendimento?');">Cancelar</a>
-          </div>
-        </div>
+      <div th:if="${#lists.isEmpty(proximosAtendimentos)}" class="empty">
+        Nenhum próximo atendimento.
       </div>
 
-      <!-- ALUNO / PROFISSIONAL -->
-      <div th:if="${tipoUsuario == 'ALUNO' or tipoUsuario == 'PROFISSIONAL'}">
-        <h2>Próximos atendimentos</h2>
-
-        <div th:if="${#lists.isEmpty(proximosAtendimentos)}" style="color:white;">
-          Nenhum próximo atendimento.
-        </div>
-
-        <div th:each="a : ${proximosAtendimentos}" class="card">
-          <div class="card-info">
-            <p th:if="${tipoUsuario != 'ALUNO'}"><strong>Aluno:</strong> <span th:text="${a.aluno.nome}"></span></p>
-            <p><strong>Profissional:</strong> <span th:text="${a.profissional.nome}"></span></p>
-            <p><strong>Data/Hora:</strong>
-              <span th:text="${#temporals.format(a.dataHora, 'dd/MM/yyyy HH:mm')}"></span>
-            </p>
-            <p><strong>Tipo:</strong> <span th:text="${a.tipo}"></span></p>
+      <div th:each="a : ${proximosAtendimentos}" class="card">
+        <div class="card-info">
+          <div class="meta">
+            <p th:if="${tipoUsuario != 'ALUNO'}"><strong>Aluno:</strong> <span th:text="${a.aluno.nome}">—</span></p>
+            <p><strong>Profissional:</strong> <span th:text="${a.profissional.nome}">—</span></p>
+            <p><strong>Data/Hora:</strong> <span th:text="${#temporals.format(a.dataHora, 'dd/MM/yyyy HH:mm')}">—</span></p>
+            <p><strong>Tipo:</strong> <span th:text="${a.tipo}">—</span></p>
             <p>
               <strong>Status:</strong>
               <span class="badge b-realizado" th:if="${a.realizado == true}">REALIZADO</span>
               <span class="badge b-agendado" th:if="${a.realizado != true}">AGENDADO</span>
             </p>
           </div>
-
-          <div class="actions">
-            <a th:if="${tipoUsuario == 'PROFISSIONAL'}"
-               th:href="@{/atendimento/editar/{id}(id=${a.id})}"
-               class="btn">Aba do Profissional</a>
-          </div>
         </div>
 
-        <h2>Atendimentos antigos</h2>
-
-        <div th:if="${#lists.isEmpty(atendimentosAntigos)}" style="color:white;">
-          Nenhum atendimento antigo.
-        </div>
-
-        <div th:each="a : ${atendimentosAntigos}" class="card">
-          <div class="card-info">
-            <p th:if="${tipoUsuario != 'ALUNO'}"><strong>Aluno:</strong> <span th:text="${a.aluno.nome}"></span></p>
-            <p><strong>Profissional:</strong> <span th:text="${a.profissional.nome}"></span></p>
-            <p><strong>Data/Hora:</strong>
-              <span th:text="${#temporals.format(a.dataHora, 'dd/MM/yyyy HH:mm')}"></span>
-            </p>
-            <p><strong>Tipo:</strong> <span th:text="${a.tipo}"></span></p>
-            <p>
-              <strong>Status:</strong>
-
-              <span class="badge b-cancelado" th:if="${a.cancelado == true}">CANCELADO</span>
-
-              <span class="badge b-realizado"
-                    th:if="${a.cancelado != true and a.realizado == true}">REALIZADO</span>
-
-              <span class="badge b-agendado"
-                    th:if="${a.cancelado != true and a.realizado != true}">AGENDADO</span>
-            </p>
-          </div>
+        <div class="actions">
+          <a th:if="${tipoUsuario == 'PROFISSIONAL'}"
+             th:href="@{/atendimento/editar/{id}(id=${a.id})}"
+             class="btn btn-primary">
+            Aba do profissional
+          </a>
         </div>
       </div>
-    </main>
+    </div>
 
-    <footer>Shalom+ &copy; 2025</footer>
-  </body>
+    <div class="section">
+      <h2>Atendimentos antigos</h2>
+
+      <div th:if="${#lists.isEmpty(atendimentosAntigos)}" class="empty">
+        Nenhum atendimento antigo.
+      </div>
+
+      <div th:each="a : ${atendimentosAntigos}" class="card">
+      <div class="card-info">
+        <div class="meta">
+          <p th:if="${tipoUsuario != 'ALUNO'}"><strong>Aluno:</strong> <span th:text="${a.aluno.nome}">—</span></p>
+          <p><strong>Profissional:</strong> <span th:text="${a.profissional.nome}">—</span></p>
+          <p><strong>Data/Hora:</strong> <span th:text="${#temporals.format(a.dataHora, 'dd/MM/yyyy HH:mm')}">—</span></p>
+          <p><strong>Tipo:</strong> <span th:text="${a.tipo}">—</span></p>
+
+          <p>
+            <strong>Status:</strong>
+            <span class="badge b-cancelado" th:if="${a.cancelado == true}">CANCELADO</span>
+            <span class="badge b-realizado" th:if="${a.cancelado != true and a.realizado == true}">REALIZADO</span>
+            <span class="badge b-agendado" th:if="${a.cancelado != true and a.realizado != true}">AGENDADO</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="actions" th:if="${tipoUsuario == 'PROFISSIONAL'}">
+        <a th:href="@{/atendimento/editar/{id}(id=${a.id})}" class="btn btn-primary">
+          Aba do profissional
+        </a>
+      </div>
+    </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  Shalom+ &copy; 2025 • IFPB
+</footer>
+
+</body>
 </html>
